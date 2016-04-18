@@ -1,0 +1,22 @@
+{
+  "name": "arida-fetch",
+  "version": "0.0.0",
+  "description": "communicating framework with server for fetching data sychronously by default and combain the http request",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "test": "babel-node babel test "
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://www.github.com/azl397985856/arida-fetch"
+  },
+  "keywords": [
+    "fetch",
+    "ajax",
+    "http",
+    "sychronous"
+  ],
+  "author": "zhipengLu",
+  "license": "MIT"
+}
