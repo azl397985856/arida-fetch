@@ -1,5 +1,5 @@
 ## Introduction
-A libabry for communicating with server. we send requests sychronously by default in case of occuring wired things. And combain your http request is supported. But id needs backend to analyze and response the serizable responses content.
+A libabry for communicating with server. we send requests sychronously by default in case of occuring wired things. And combine your http request is supported. But id needs backend to analyze and response the serizable responses content.
 ## Install
 
 ```bash
