@@ -1,1 +1,3 @@
-import './core.js';
+import core from './core.js';
+
+module.exports = core;

@@ -1,11 +1,11 @@
 {
   "name": "arida-fetch",
-  "version": "0.0.0",
-  "description": "communicating framework with server for fetching data sychronously by default and combain the http request",
+  "version": "0.0.1",
+  "description": "communicating framework with server for fetching data sychronously by default and combine the http request",
   "main": "lib/index.js",
   "scripts": {
     "build": "babel src -d lib",
-    "test": "babel-node babel test "
+    "test": "babel-node ./test/index.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,16 @@
     "http",
     "sychronous"
   ],
+  "devDependencies": {
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-preset-es2015": "^6.6.0"
+  },
   "author": "zhipengLu",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^6.5.2",
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.7.6"
+  }
 }
