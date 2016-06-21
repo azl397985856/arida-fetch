@@ -18,15 +18,14 @@
     "sychronous"
   ],
   "devDependencies": {
+    "babel": "^6.5.2",
     "babel-cli": "^6.6.5",
     "babel-core": "^6.7.2",
-    "babel-preset-es2015": "^6.6.0"
+    "babel-preset-es2015": "^6.6.0",
+    "webdriver-client": "^1.0.10"
   },
   "author": "zhipengLu",
   "license": "MIT",
   "dependencies": {
-    "babel": "^6.5.2",
-    "babel-cli": "^6.7.5",
-    "babel-core": "^6.7.6"
   }
 }

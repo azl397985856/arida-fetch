@@ -1,83 +1,71 @@
-let XMLHttpFactories = [
-	function() {
-		return new XMLHttpRequest();
-	},
-	function () {
-		return new window.ActiveXObject('Msxml2.XMLHTTP');
-	},
-	function () {
-		return new window.ActiveXObject('Msxml3.XMLHTTP');
-	},
-	function () {
-		return new window.ActiveXObject('Microsoft.XMLHTTP');
-	},
-];
-function createXMLHTTPObject() {
-	let xmlhttp = false;
-	for (let i = 0; i < XMLHttpFactories.length; i++) {
-		try {
-			xmlhttp = XMLHttpFactories[i]();
-		} catch (e) {
-			continue;
-		}
-		break;
-	}
-	return xmlhttp;
-}
-function sleep(ms) {
+;function _sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
-let queue = [];
+function sequenceTasks(tasks) {
+    function recordValue(results, value) {
+        results.push(value);
+        return results;
+    }
+    var pushValue = recordValue.bind(null, []);
+    return tasks.reduce(function (promise, task) {
+        return promise.then(task).then(pushValue);
+    }, Promise.resolve());
+}
+
+let global_settings = {
+	async: false,
+	dataType: 'json',
+	contentType: 'application/json',
+	xhrFields: {
+		withCredentials: false
+	},
+	delay: 500,
+	strategy: 'lazy'
+}
 const fetch = {
-	send: function(param) {// mothod, url, data, success, error, complete, complete, timeout, sync
-		// console.log(param.mothod);
-		let xhr = createXMLHTTPObject();
-		if (!xhr) return;
-		const mothod = param['mothod'] ? param['mothod'] : 'get';
-        const url = param['url'] ? param['url'] : '#';
-        const sync = param['sync'] ? param['sync'] : true;
-        const data = param['data'] ? param['data'] : null;
-        const dataType = param['dataType'] ? param['dataType'] : 'html';
-        const success = typeof param['success'] == 'function' ? param['success'] : function(){};
-        const error = typeof param['error'] == 'function' ? param['error'] : function(){};
-        const complete = typeof param['complete'] == 'function' ? param['complete'] : function(){};
-        const timeout = param['timeout'] ? param['timeout'] : 3000;
-        try
-        {
-        	if (this.setting.strategy === 'lazy') {
-        		sleep(500);
-        	} else {
-    			 xmlhttp.open(mothod, url, !sync);
-	            xmlhttp.send(data);
-	            xmlhttp.onreadystatechange = function()
-	            {
-	                if(xmlhttp.readyState != 4){return;}
-	                switch (xmlhttp.status)
-	                {
-	                    case 200 : success(xmlhttp.responseText);complete(xmlhttp,'success');break;
-	                    case 404 : error(xmlhttp,'Not Found',null);complete(xmlhttp,'error');break;
-	                    case 500 : error(xmlhttp,'Internal Server Error',null);complete(xmlhttp,'error');break;
-	                    default : error(xmlhttp,'error',null);complete(xmlhttp,'error');break;
-	                }
-	            };
-        	}
-        }
-        catch(e)
-        {
-            error(xmlhttp,'error',e);
-            complete(xmlhttp,'error');
-        }
-},
-	push: function(ajax) {
-		queue.push(ajax);
+	get: function(URL, settings = global_settings) {
+		return new Promise(function (resolve, reject) {
+	        var req = new XMLHttpRequest();
+	        req.open('GET', URL, settings.async);
+	        // set req header
+	        req.setRequestHeader('Content-Type', settings.contentType);
+	        req.setRequestHeader('With-Credentials', settings.contentType);
+	        req.setRequestHeader('Data-Type', settings.dataType);
+	        req.onload = function () {
+	            if (req.status === 200) {
+	                resolve(req.responseText);
+	            } else {
+	                reject(new Error(req.statusText));
+	            }
+	        };
+	        req.onerror = function () {
+	            reject(new Error(req.statusText));
+	        };
+	        req.send();
+	    });
 	},
-	batchSend: function() {
-		for (var i = 0; i < queue.length; i++) {
-			this.send({mothod: queue[i].mothod});
-		}
+	post: function(payload, settings = global_settings) {
+		return new Promise(function (resolve, reject) {
+	        var req = new XMLHttpRequest();
+	        req.open('POST', payload.URL, true); // TRUE OR FALSE by setting given by user
+	        req.onload = function () {
+	            if (req.status === 200) {
+	                resolve(req.responseText);
+	            } else {
+	                reject(new Error(req.statusText));
+	            }
+	        };
+	        req.onerror = function () {
+	            reject(new Error(req.statusText));
+	        };
+	        req.send(payload.data);
+	    });
 	},
-	setting: {
-		strategy: 'default'
+	sequenceTasks: function(tasks) {
+		return sequenceTasks(tasks);
+	},
+	setDefault: function(settings) {
+		global_settings = settings;
 	}
 }
 

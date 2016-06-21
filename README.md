@@ -11,30 +11,39 @@ npm install arida-fetch
 ``` javascript
 impot fetch from 'arida-fetch';
 
-fetch.push({
-	url: 'http://www.itechnique.cn/get/1',
-	mothod: 'get',
-	setting: {
-		strategy: 'lazy'
-	}
+fetch.get('http://www.itechnique.cn/get/1')
+.then((data)=>{
+	console.log(data);
+})
+.catch((error)=>{
+	console.log(error);
 });
-fetch.push({
-	url: 'http://www.itechnique.cn/get/2',
-	mothod: 'get',
-	setting: {
-		strategy: 'lazy'
-	}
-});
+fetch.post({
+	URL: 'http://www.itechnique.cn/get/2',
+	data: {a: 1}
+}).then((data)=>{
+	console.log(data);
+})
+.catch((error)=>{
+	console.log(error);
+});;
 ```
-Then two requets will be sent to the server on by one . each has an 500ms delay. For more information, plz check the API doc.
+Then two requets will be sent to the server on by one , For more information, plz check the API doc.
 
 ## API
 The following is an incomplete list of arida-fetch API. It should give you a general concept of arida-fetch's usage.
 
-- `.send(url, type || 'get', syc || true)`: send your request to server;
-- `.push(param)`: push the request to the quene;
-- `.batchSend(param)`: send the requests of the quene;
-- `.setting: only default and lazy(sleep 500ms before per request) supported at present
+- `.sequenceTasks(tasks)`: send your request in order to server;
+- `.setDefault(settings): modify the default sending setting.  by default:
+{
+	async: false,
+	dataType: 'json',
+	contentType: 'application/json',
+	xhrFields: {
+		withCredentials: false
+	},
+	strategy: 'lazy'
+}
 TODO
 
 ## Contributing
